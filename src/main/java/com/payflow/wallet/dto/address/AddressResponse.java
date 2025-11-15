@@ -1,4 +1,4 @@
-package com.payflow.wallet.dto;
+package com.payflow.wallet.dto.address;
 
 public record AddressResponse(
         Long id,

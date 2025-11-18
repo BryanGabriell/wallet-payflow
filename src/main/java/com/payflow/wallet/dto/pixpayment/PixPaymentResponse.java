@@ -1,4 +1,4 @@
-package com.payflow.wallet.dto.pixpaygament;
+package com.payflow.wallet.dto.pixpayment;
 
 
 import com.payflow.wallet.enums.pixpaygamentenum.PixPaygamentStatus;
@@ -6,7 +6,7 @@ import com.payflow.wallet.enums.pixpaygamentenum.PixPaygamentStatus;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record PixPaygamentResponse(
+public record PixPaymentResponse(
         Long id,
         BigDecimal amount,
         String pixKey,

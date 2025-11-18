@@ -10,7 +10,7 @@ public record VirtualCardResponse(
         Long id,
         String maskedCardNumber,
         BigDecimal cardLimit,
-        VirtualCardStatus status,
+        VirtualCardStatus cardStatus,
         Long userId,
         LocalDateTime createdAt,
         LocalDateTime updateAt

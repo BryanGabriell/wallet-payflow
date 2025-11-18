@@ -2,15 +2,21 @@ package com.payflow.wallet.dto.user;
 
 
 import com.payflow.wallet.dto.address.AddressRequest;
+import com.payflow.wallet.enums.userenums.Role;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.br.CPF;
 
 public record UserRequest(
         @NotBlank(message = "Nome de usuário é obrigatório")
         @Size(min = 3, max = 100, message = "O nome de usuário deve ter entre 3 e 100 caracteres")
         String username,
+
+        @CPF(message = "CPF fornecido não é válido")
+        String cpf,
 
         @NotBlank(message = "E-mail é obrigatório")
         @Email(message = "E-mail inválido")
@@ -23,8 +29,8 @@ public record UserRequest(
         @Pattern(regexp = "\\d{10,11}", message = "O telefone deve conter 10 ou 11 dígitos numéricos")
         String phone,
 
-        AddressRequest address,
+        @Valid AddressRequest address,
 
         @NotBlank(message = "O papel (role) do usuário é obrigatório")
-        String role) {
+        Role role) {
 }

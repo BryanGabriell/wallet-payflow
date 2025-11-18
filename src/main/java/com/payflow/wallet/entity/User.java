@@ -5,12 +5,13 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.payflow.wallet.enums.userenums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
 @Table(name = "users")
 public class User {
@@ -32,6 +33,9 @@ public class User {
     @Column(length = 20)
     private String phone;
 
+    @Column(nullable = false, length = 11, unique = true)
+    private String cpf;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private Role role;
@@ -48,4 +52,5 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference("user-virtualcard")
     private VirtualCard virtualCard;
+
 }

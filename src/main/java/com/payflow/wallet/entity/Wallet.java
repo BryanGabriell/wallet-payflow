@@ -5,6 +5,7 @@ import com.payflow.wallet.enums.walletenums.WalletStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -30,4 +31,7 @@ public class Wallet {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     @JsonBackReference("user-wallet")
     private User user;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

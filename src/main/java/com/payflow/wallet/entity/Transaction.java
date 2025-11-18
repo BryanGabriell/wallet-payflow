@@ -4,6 +4,8 @@ import com.payflow.wallet.enums.transactionsenums.TransactionStatus;
 import com.payflow.wallet.enums.transactionsenums.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -11,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
 @Table(name = "transactions")
 public class Transaction {
@@ -42,7 +44,7 @@ public class Transaction {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @OneToOne(mappedBy = "transaction", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "transaction", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private PixPayment pixPayment;
 
 }

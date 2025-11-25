@@ -52,5 +52,9 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference("user-virtualcard")
     private VirtualCard virtualCard;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private RefreshToken refreshToken;
+
 
 }

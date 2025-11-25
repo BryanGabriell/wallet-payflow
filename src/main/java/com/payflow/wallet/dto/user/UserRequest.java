@@ -4,10 +4,7 @@ package com.payflow.wallet.dto.user;
 import com.payflow.wallet.dto.address.AddressRequest;
 import com.payflow.wallet.enums.userenums.Role;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.br.CPF;
 
 public record UserRequest(
@@ -31,6 +28,6 @@ public record UserRequest(
 
         @Valid AddressRequest address,
 
-        @NotBlank(message = "O papel (role) do usuário é obrigatório")
+        @NotNull(message = "O papel do usuário é obrigatório")
         Role role) {
 }

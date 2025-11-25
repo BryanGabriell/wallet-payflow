@@ -14,6 +14,7 @@ import com.payflow.wallet.exception.EmailAlreadyUsedException;
 import com.payflow.wallet.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -30,7 +31,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
         this.virtualCardService = virtualCardService;
     }
-
+@Transactional
     public UserResponse registerUser(UserRequest dto) {
         repository.findByEmail(dto.email()).ifPresent(user -> {
             throw new EmailAlreadyUsedException("Email já está em uso");
@@ -49,7 +50,7 @@ public class UserService {
             .cpf(dto.cpf())
             .password(hashedPassword).
             email(dto.email()).
-            phone(dto.phone()).role(Role.USER).
+            phone(dto.phone()).role(Role.ROLE_USER).
             address(address).
             build();
 

@@ -4,7 +4,9 @@ import com.payflow.wallet.dto.auth.LoginRequest;
 import com.payflow.wallet.dto.auth.LoginResponse;
 import com.payflow.wallet.entity.RefreshToken;
 import com.payflow.wallet.entity.User;
+import com.payflow.wallet.enums.userenums.Role;
 import com.payflow.wallet.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -68,4 +70,27 @@ public class AuthService {
                 formatter.format(expiresAt)
         );
     }
-}
+
+    public Long getLoggedUserId() {
+        String subject = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+
+        return Long.parseLong(subject);
+    }
+
+    public Role getLoggedUserRoleEnum() {
+        String role = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getAuthorities()
+                .iterator()
+                .next()
+                .getAuthority();  // "ROLE_USER"
+
+        return Role.valueOf(role.replace("ROLE_", ""));
+    }
+
+    }
+
+
+

@@ -10,8 +10,6 @@ public record WalletResponse(Long id,
                              BigDecimal balance,
                              WalletStatus status,
                              Long userId,
-                             String username,
-                             String email,
                              LocalDateTime createAt
 ) {
 }

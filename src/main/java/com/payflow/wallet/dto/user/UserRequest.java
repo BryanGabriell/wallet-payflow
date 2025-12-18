@@ -26,8 +26,5 @@ public record UserRequest(
         @Pattern(regexp = "\\d{10,11}", message = "O telefone deve conter 10 ou 11 dígitos numéricos")
         String phone,
 
-        @Valid AddressRequest address,
-
-        @NotNull(message = "O papel do usuário é obrigatório")
-        Role role) {
+        @Valid AddressRequest address){
 }

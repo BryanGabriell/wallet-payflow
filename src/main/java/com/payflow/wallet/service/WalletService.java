@@ -1,6 +1,7 @@
 package com.payflow.wallet.service;
 
 import com.payflow.wallet.dto.transaction.TransactionRequest;
+import com.payflow.wallet.dto.transaction.TransactionResponse;
 import com.payflow.wallet.dto.user.UserRequest;
 import com.payflow.wallet.dto.wallet.BalanceResponse;
 import com.payflow.wallet.dto.wallet.WalletRequest;
@@ -16,6 +17,7 @@ import com.payflow.wallet.exception.*;
 import com.payflow.wallet.repository.TransactionRepository;
 import com.payflow.wallet.repository.UserRepository;
 import com.payflow.wallet.repository.WalletRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -225,6 +227,67 @@ public class WalletService {
 
         return new BalanceResponse(
                 wallet.getBalance()
+        );
+    }
+
+    private void validateWalletActive(Wallet walletSender,Wallet walletReceiver){
+        if(walletSender.getStatus() != WalletStatus.ATIVA){
+            throw new WalletInactiveException("Essa carteira não está ativa");
+        }
+        if(walletReceiver.getStatus() != WalletStatus.ATIVA){
+            throw new WalletInactiveException("Essa carteira não está ativa");
+        }
+    }
+
+
+    @Transactional
+    public TransactionResponse transfer(TransactionRequest request){
+    Wallet walletSender = walletRepository.findById(request.senderWalletId()).orElseThrow(() ->
+         new WalletInexistenteError("Erro. A Carteira do remetente não existe"));
+
+    Wallet walletReceiver = walletRepository.findById(request.receiverWalletId()).orElseThrow(() ->
+         new WalletInexistenteError("Erro. A Carteira do destinario não existe"));
+
+    if (walletSender.equals(walletReceiver)){
+        throw new WalletIdenticasError("Erro. Não remetente e destinario nao pode ser o mesmo");
+    }
+
+   validateWalletActive(walletSender,walletReceiver);
+
+
+    if(walletSender.getBalance().compareTo(request.amount())  < 0 ){
+        throw new WalletBalanceInsuficiente("Saldo Insuficiente");
+    }
+
+        Transaction transaction = Transaction.builder()
+                .amount(request.amount())
+                .type(TransactionType.PAGAMENTO)
+                .status(TransactionStatus.PENDENTE)
+                .sender(walletSender)
+                .receiver(walletReceiver)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        var saldoRemetente = walletSender.getBalance();
+        var novoSaldoRemetente = saldoRemetente.subtract(request.amount());
+        walletSender.setBalance(novoSaldoRemetente);
+
+        var saldoReceiver = walletReceiver.getBalance();
+        var novoSaldoReceiver = saldoReceiver.add(request.amount());
+        walletReceiver.setBalance(novoSaldoReceiver);
+
+        transaction.setStatus(TransactionStatus.CONCLUIDO);
+
+       transactionRepository.save(transaction);
+
+        return new TransactionResponse(
+                transaction.getId(),
+                transaction.getAmount(),
+                transaction.getType(),
+                transaction.getStatus(),
+                transaction.getSender().getId(),
+                transaction.getReceiver().getId(),
+                transaction.getCreatedAt()
         );
     }
     }

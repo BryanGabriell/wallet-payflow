@@ -2,7 +2,6 @@ package com.payflow.wallet.service;
 
 import com.payflow.wallet.dto.transaction.TransactionRequest;
 import com.payflow.wallet.dto.transaction.TransactionResponse;
-import com.payflow.wallet.dto.user.UserRequest;
 import com.payflow.wallet.dto.wallet.BalanceResponse;
 import com.payflow.wallet.dto.wallet.WalletRequest;
 import com.payflow.wallet.dto.wallet.WalletResponse;
